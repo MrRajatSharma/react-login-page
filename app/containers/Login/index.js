@@ -64,21 +64,63 @@ export default function SignUp() {
 	const handleCountryChange = event => {
 		setCountry(event.target.value);
 	};
-
+	
+	
 	const handleFnameChange = event => {
 		setFname(event.target.value);
+
+		if (event.target.value.length <= 3) {
+			setFNameError('At least 3 characters required');
+		} else {
+			setFNameError(null);
+		}
 	}
 
 	const handleLnameChange = event => {
 		setLname(event.target.value);
+
+		if (event.target.value.length <= 3) {
+			setLNameError('At least 3 characters required');
+		} else {
+			setLNameError(null);
+		}
+
 	}
 
 	const handleEmailChange = event => {
 		setEmail(event.target.value);
+
+		var sQtext = '[^\\x0d\\x22\\x5c\\x80-\\xff]';
+		var sDtext = '[^\\x0d\\x5b-\\x5d\\x80-\\xff]';
+		var sAtom = '[^\\x00-\\x20\\x22\\x28\\x29\\x2c\\x2e\\x3a-\\x3c\\x3e\\x40\\x5b-\\x5d\\x7f-\\xff]+';
+		var sQuotedPair = '\\x5c[\\x00-\\x7f]';
+		var sDomainLiteral = '\\x5b(' + sDtext + '|' + sQuotedPair + ')*\\x5d';
+		var sQuotedString = '\\x22(' + sQtext + '|' + sQuotedPair + ')*\\x22';
+		var sDomain_ref = sAtom;
+		var sSubDomain = '(' + sDomain_ref + '|' + sDomainLiteral + ')';
+		var sWord = '(' + sAtom + '|' + sQuotedString + ')';
+		var sDomain = sSubDomain + '(\\x2e' + sSubDomain + ')*';
+		var sLocalPart = sWord + '(\\x2e' + sWord + ')*';
+		var sAddrSpec = sLocalPart + '\\x40' + sDomain; // complete RFC822 email address spec
+		var sValidEmail = '^' + sAddrSpec + '$'; // as whole string
+		var emailRegex = new RegExp(sValidEmail);
+		if (event.target.value.match(emailRegex)) {
+			setEmailError(null);
+		} else {
+			setEmailError('Valid email required');
+		}
 	}
 
 	const handlePasswordChange = event => {
 		setPassword(event.target.value);
+
+		var passwordRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+		console.log('p', password, password.match(passwordRegex));
+		if (event.target.value.match(passwordRegex)) {
+			setPasswordError(null);
+		} else {
+			setPasswordError('At least 8 digits, 1 uppercase, 1 number and 1 special character');
+		}
 	}
 
 	const handlePhoneChange = event => {
@@ -91,35 +133,6 @@ export default function SignUp() {
 
 	const handleSubmit = event => {
 		event.preventDefault();
-		console.log("handle submit called", fName, country);
-
-		if (fName.length <= 3) {
-			setFNameError('At least 3 characters required');
-		} else {
-			setFNameError(null);
-		}
-
-		if (lName.length <= 3) {
-			setLNameError('At least 3 characters required');
-		} else {
-			setLNameError(null);
-		}
-
-		var emailRegex = new RegExp("(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}");
-		if (email.match(emailRegex)) {
-			setEmailError(null);
-		} else {
-			setEmailError('Valid email required');
-		}
-
-		var passwordRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
-		console.log('p', password, password.match(passwordRegex));
-		if (password.match(passwordRegex)) {
-			setPasswordError(null);
-		} else {
-			setPasswordError('At least 8 digits, 1 uppercase, 1 number and 1 special character');
-		}
-
 	};
 
 	return (
