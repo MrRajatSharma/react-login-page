@@ -54,7 +54,7 @@
     "immer": "3.0.0",
     "intl": "1.2.5",
     "invariant": "2.2.4",
-    "ip": "1.1.5",
+    "ip": "1.1.9",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.15",
     "minimist": "1.2.5",
